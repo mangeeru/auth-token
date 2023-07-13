@@ -1,5 +1,7 @@
 package com.tech.auth.token.security.api.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,15 +19,19 @@ import com.tech.auth.token.security.service.HashService;
 @RestController
 public class HashController {
 	
+	private static final Logger _logger = LoggerFactory.getLogger(HashController.class);
+	
 	@Autowired
 	private HashService hashService;
 	
 	@PostMapping(value = "/generate-hash", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
 	public ResponseEntity<RequestResponseWrapper<AuthResponse>> generateHash(@RequestBody RequestResponseWrapper<AuthRequest> request){
 		AuthResponse response = null;
+		_logger.info("Start Hash Generation in Controller");
 		if(request.getData() != null) {
 			response = hashService.generateHash(request.getData());
 		}
+		_logger.info("Got the reponse from service");
 		RequestResponseWrapper responseWrapper = new RequestResponseWrapper<>();
 		responseWrapper.setData(response);
 		return new ResponseEntity<>(responseWrapper, HttpStatus.OK);
@@ -49,7 +55,7 @@ public class HashController {
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	
-	@GetMapping(value = "health-check")
+	@GetMapping(value = "/health-check")
 	public String healthCheck() {
 		return "Application up and running...!";
 	}

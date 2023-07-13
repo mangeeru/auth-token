@@ -1,20 +1,17 @@
-package com.tech.auth.token;
+package com.tech.auth.token.config;
 
+import org.jasypt.encryption.StringEncryptor;
 import org.jasypt.encryption.pbe.PooledPBEStringEncryptor;
 import org.jasypt.encryption.pbe.config.SimpleStringPBEConfig;
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
-@SpringBootTest
-class AuthTokenApplicationTests {
-
-	@Test
-	void contextLoads() {
-	}
+@Configuration
+public class JasyptEncryptorConfig {
 	
-	@Test
-	public void testEncryptionKey() {
-		PooledPBEStringEncryptor encryptor = new PooledPBEStringEncryptor();
+	@Bean(name = "jasyptStringEncryptor")
+    public StringEncryptor stringEncryptor() {
+        PooledPBEStringEncryptor encryptor = new PooledPBEStringEncryptor();
         SimpleStringPBEConfig config = new SimpleStringPBEConfig();
         config.setPassword("jup!teR@260123");
         config.setAlgorithm("PBEWITHHMACSHA512ANDAES_256");
@@ -25,9 +22,7 @@ class AuthTokenApplicationTests {
         config.setIvGeneratorClassName("org.jasypt.iv.RandomIvGenerator");
         config.setStringOutputType("base64");
         encryptor.setConfig(config);
-        
-        String planText = "s@turn@charaN";
-        System.out.println("Encrypted Key:"+encryptor.encrypt(planText));
-	}
+        return encryptor;
+    }
 
 }

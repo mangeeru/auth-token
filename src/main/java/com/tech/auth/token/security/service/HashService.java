@@ -11,7 +11,7 @@ import com.tech.auth.token.security.api.dto.AuthResponse;
 import com.tech.auth.token.security.util.PasswordHashUtil;
 
 @Configuration
-@Service
+@Service("hashService")
 public class HashService {
 	
 	private static final Logger _logger = LoggerFactory.getLogger(HashService.class);
@@ -28,9 +28,11 @@ public class HashService {
 	
 	public AuthResponse generateHash(AuthRequest request) {
 		String hash="";
+		_logger.info("Received request from controoler to service for Hash Generate");
 		if(request.getSecret() != null && !request.getSecret().isEmpty()) {
 			hash = getHashUtil().generateHash(request.getSecret());
 		}
+		_logger.info("Received Hash from HashUtil");
 		AuthResponse response = new AuthResponse();
 		response.setHash(hash);
 		return response;

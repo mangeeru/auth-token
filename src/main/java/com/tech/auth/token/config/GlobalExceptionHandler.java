@@ -48,7 +48,8 @@ public class GlobalExceptionHandler {
 
 		ErrorResponse errorResponse = constractErrorResponse(Optional.of(HttpStatus.INTERNAL_SERVER_ERROR),
 				Optional.empty(), Optional.of("Internal Server Error"), Optional.of(obErrors));
-		
+		_logger.info(exception.toString());
+		_logger.info(exception.getMessage());
 		return new ResponseEntity<ErrorResponse>(errorResponse,HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
@@ -61,7 +62,8 @@ public class GlobalExceptionHandler {
 
 		ErrorResponse errorResponse = constractErrorResponse(Optional.of(HttpStatus.BAD_REQUEST),
 				Optional.empty(), Optional.of("Invalid request parameters"), Optional.of(obErrors));
-		
+		_logger.info(exception.toString());
+		_logger.info(exception.getMessage());
 		return new ResponseEntity<ErrorResponse>(errorResponse,HttpStatus.BAD_REQUEST);
 	}
 	
@@ -77,7 +79,8 @@ public class GlobalExceptionHandler {
 
 		ErrorResponse errorResponse = constractErrorResponse(Optional.of(HttpStatus.BAD_REQUEST),
 				Optional.empty(), Optional.of(message), Optional.of(obErrors));
-		
+		_logger.info(exception.toString());
+		_logger.info(exception.getMessage());
 		return new ResponseEntity<ErrorResponse>(errorResponse,HttpStatus.BAD_REQUEST);
 	}
 

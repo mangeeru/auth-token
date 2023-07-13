@@ -2,6 +2,8 @@ package com.tech.auth.token.security.util;
 
 import java.util.Base64;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.token.Sha512DigestUtils;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.encrypt.BouncyCastleAesGcmBytesEncryptor;
@@ -16,6 +18,8 @@ public class PasswordHashUtil {
 
 	private String aesPassword;// encrypted password
 	private CharSequence aesSalt;
+	
+	private static final Logger _logger = LoggerFactory.getLogger(PasswordHashUtil.class);
 
 	public PasswordHashUtil() {
 		super();
@@ -34,15 +38,19 @@ public class PasswordHashUtil {
 	 * @return return encrypted password
 	 */
 	public String generateHash(String pwdString) {
+		_logger.info("Starting password hash generation");
 		BouncyCastleAesGcmBytesEncryptor bytesEncryptor = new BouncyCastleAesGcmBytesEncryptor(aesPassword, aesSalt);
 
+		_logger.info("BouncyCastle connect successfully..");
 		Argon2PasswordEncoder passwordEncoder = new Argon2PasswordEncoder(SALT_LENGTH, HASH_LENGTH, PARALLELISM,
 				DEFAULT_MEMORY, DEFAULT_ITERATIONS);
 
+		_logger.info("Argon2PasswordEncoder intiated Successfully..");
 		String shaHexString = Sha512DigestUtils.shaHex(pwdString);
 		String pwdHashString = passwordEncoder.encode(shaHexString);
 		byte[] pwdHashBytesString = bytesEncryptor.encrypt(pwdHashString.getBytes());
-		String hashedEncryptedPwd = new String(pwdHashBytesString);
+		String hashedEncryptedPwd = new String(Base64.getEncoder().encode(pwdHashBytesString));
+		_logger.info("Password Hash generated successfully:"+hashedEncryptedPwd);
 
 		return hashedEncryptedPwd;
 	}
