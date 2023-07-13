@@ -1,4 +1,4 @@
-package com.tech.auth.token.security.api.dto;
+package com.tech.auth.token.dto;
 
 import java.util.HashMap;
 import java.util.Map;

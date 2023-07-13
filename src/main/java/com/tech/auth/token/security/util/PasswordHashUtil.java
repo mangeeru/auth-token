@@ -50,7 +50,7 @@ public class PasswordHashUtil {
 		String pwdHashString = passwordEncoder.encode(shaHexString);
 		byte[] pwdHashBytesString = bytesEncryptor.encrypt(pwdHashString.getBytes());
 		String hashedEncryptedPwd = new String(Base64.getEncoder().encode(pwdHashBytesString));
-		_logger.info("Password Hash generated successfully:"+hashedEncryptedPwd);
+		_logger.info("Password Hash generated successfully:\n"+hashedEncryptedPwd);
 
 		return hashedEncryptedPwd;
 	}

@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tech.auth.token.dto.RequestResponseWrapper;
 import com.tech.auth.token.security.api.dto.AuthRequest;
 import com.tech.auth.token.security.api.dto.AuthResponse;
-import com.tech.auth.token.security.api.dto.RequestResponseWrapper;
 import com.tech.auth.token.security.service.HashService;
 
 @RestController
