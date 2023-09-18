@@ -17,30 +17,35 @@ public class JmtUtil {
 	
 	private static final Logger _logger = LoggerFactory.getLogger(JmtUtil.class);
 	
-	public static String createJsonTokenObj() throws JsonProcessingException {
+	public String createJsonTokenObj(JmToken token) throws JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
-		JmToken token = new JmToken();
-		token.setUserid("jupiter");
-		Calendar currentDate = Calendar.getInstance();
-		token.setStart(Constants.dateFormater.format(currentDate.getTime()));
-		currentDate.add(Calendar.MINUTE, Constants.TOKEN_VALID_PERIOD);
-		token.setEnd(Constants.dateFormater.format(currentDate.getTime()));
-		_logger.info("Before Write Json:"+token.toString());
-		String jsonString = mapper.writeValueAsString(token);
-		_logger.info("jsonString:"+jsonString);
-		String tokenString = JmtHashUtil.encrypt(jsonString);
-		_logger.info("Encrypted Token:"+tokenString);
+		//JmToken token = new JmToken();
+		//token.setUserid("jupiter");
+		String tokenString = null;
+		if(token != null) {
+			Calendar currentDate = Calendar.getInstance();
+			token.setStart(Constants.dateFormater.format(currentDate.getTime()));
+			currentDate.add(Calendar.MINUTE, Constants.TOKEN_VALID_PERIOD);
+			token.setEnd(Constants.dateFormater.format(currentDate.getTime()));
+			_logger.info("Before Write Json:"+token.toString());
+			String jsonString = mapper.writeValueAsString(token);
+			_logger.info("jsonString:"+jsonString);
+			tokenString = JmtHashUtil.encrypt(jsonString);
+			_logger.info("Encrypted Token:"+tokenString);
+		}
+		
 		return tokenString;
 	}
 	
-	public static void readJsonStr(String jsonToken) throws JsonMappingException, JsonProcessingException {
+	public JmToken readJsonStr(String jsonToken) throws JsonMappingException, JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
 		String jsonStr = JmtHashUtil.decrypt(jsonToken);
 		JmToken token = mapper.readValue(jsonStr, JmToken.class);
 		_logger.info("Converted Json:"+token.toString());
+		return token;
 	}
 	
-	public static boolean isActiveToken(String endString) {
+	public boolean isActiveToken(String endString) {
 
 		try {
 			Date endTime = Constants.dateFormater.parse(endString);
@@ -56,25 +61,25 @@ public class JmtUtil {
 	
 	public static void main(String[] args) {
 		//createJsonToken();
-		String json1="";
-		String decryptStr = "";
+		//String json1="";
+		//String decryptStr = "";
 		//PasswordHashUtil hashUtil = new PasswordHashUtil(aespassword, aesSalt);
-		try {
-			json1 = createJsonTokenObj();
-			String hashToken = JmtHashUtil.encrypt(json1);
+		//try {
+			//json1 = createJsonTokenObj();
+		//	String hashToken = JmtHashUtil.encrypt(json1);
 			//System.out.println("Hash Token:"+hashToken);
-			decryptStr = JmtHashUtil.decrypt(hashToken);
-		} catch (JsonProcessingException e1) {
+		//	decryptStr = JmtHashUtil.decrypt(hashToken);
+		//} catch (JsonProcessingException e1) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}//"{\"start\":Thu Jul 13 18:16:29 IST 2023,\"end\":Thu Jul 13 18:16:29 IST 2023,\"userid\":\"jupiter\"}";
-		try {
-			
-			readJsonStr(decryptStr);
-		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		//	e1.printStackTrace();
+		//}//"{\"start\":Thu Jul 13 18:16:29 IST 2023,\"end\":Thu Jul 13 18:16:29 IST 2023,\"userid\":\"jupiter\"}";
+		/*
+		 * try {
+		 * 
+		 * readJsonStr(decryptStr); } catch (JsonProcessingException e) {
+		 * 
+		 * e.printStackTrace(); }
+		 */
 		
 	}
 
